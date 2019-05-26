@@ -10,8 +10,17 @@
   "require": {
     "php": ">=5.4",
     "yahnis-elsts/plugin-update-checker": "^4.6",
-    "seothemes/child-theme-updater": "*"
+    "seothemes/child-theme-updater": "@dev"
   },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../dev/seothemes/child-theme-updater",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "config": {
     "preferred-install": {
       "*": "dist"

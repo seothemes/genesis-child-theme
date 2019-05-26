@@ -8,6 +8,5 @@
  * @link    https://seothemes.com/
  */
 
-// Do not remove.
+// Start the engine (Do not remove).
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/vendor/seothemes/child-theme-updater/child-theme-updater.php';

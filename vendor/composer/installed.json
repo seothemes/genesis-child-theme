@@ -1,5 +1,37 @@
 [
     {
+        "name": "seothemes/child-theme-updater",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "dist": {
+            "type": "path",
+            "url": "../dev/seothemes/child-theme-updater",
+            "reference": "0b7d94df8e08c2bca58b0cbb103ddb722fa10373"
+        },
+        "require": {
+            "php": ">=5.4"
+        },
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "child-theme-updater.php"
+            ]
+        },
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "seothemes",
+                "email": "seothemeswp@gmail.com"
+            }
+        ],
+        "transport-options": {
+            "symlink": true
+        }
+    },
+    {
         "name": "yahnis-elsts/plugin-update-checker",
         "version": "v4.6",
         "version_normalized": "4.6.0.0",
