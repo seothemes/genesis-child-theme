@@ -2,64 +2,16 @@
 
 namespace SeoThemes\ChildThemeUpdater;
 
-add_action( 'init', __NAMESPACE__ . '\load_plugin_update_checker' );
-/**
- * Load plugin update checker.
- *
- * @since 1.0.0
- *
- * @return void
- */
-function load_plugin_update_checker() {
-	$defaults = \apply_filters( 'child_theme_updater', [
-		'repo'   => get_github_data(),
-		'file'   => \get_stylesheet_directory(),
-		'theme'  => \get_stylesheet(),
-		'token'  => '',
-		'branch' => 'master',
-	] );
-
-	$plugin_update_checker = \Puc_v4_Factory::buildUpdateChecker(
-		$defaults['repo'],
-		$defaults['file'],
-		$defaults['theme']
-	);
-
-	$plugin_update_checker->setBranch( $defaults['branch'] );
-
-	if ( '' !== $defaults['token'] ) {
-		$plugin_update_checker->setAuthentication( $defaults['token'] );
-	}
-}
-
-/**
- * Get Github repository URL from stylesheet header.
- *
- * @since 1.0.0
- *
- * @param string $key Key to retrieve.
- *
- * @return mixed
- */
-function get_github_data( $key = 'repo' ) {
-	$file = \get_stylesheet_directory() . DIRECTORY_SEPARATOR . 'style.css';
-	$data = \get_file_data( $file, [
-		'repo' => 'Github URI',
-	] );
-
-	return $data[ $key ];
-}
-
 add_action( 'upgrader_source_selection', __NAMESPACE__ . '\before_update', 10, 4 );
 /**
  * Runs before theme update.
  *
  * @since 1.0.0
  *
- * @param             $source
- * @param             $remote_source
- * @param             $theme_object
- * @param array|mixed $hook_extra
+ * @param string       $source        File source location.
+ * @param string       $remote_source Remote file source location.
+ * @param \WP_Upgrader $theme_object  WP_Upgrader instance.
+ * @param array        $hook_extra    Extra arguments passed to hooked filters.
  *
  * @return mixed
  */
@@ -76,9 +28,10 @@ function before_update( $source, $remote_source, $theme_object, $hook_extra ) {
 	// Duplicate theme to /temp/ directory.
 	$src    = \get_stylesheet_directory();
 	$target = dirname( $src ) . '/temp';
+	$skip   = apply_filters( 'child_theme_updater_skip', [ 'vendor' ] );
 
 	\wp_mkdir_p( $target );
-	\copy_dir( $src, $target, [ 'vendor' ] );
+	\copy_dir( $src, $target, $skip );
 
 	return $source;
 }
@@ -137,8 +90,9 @@ function after_update( $response, $hook_extra, $result ) {
 	 */
 	$target = \get_stylesheet_directory();
 	$source = dirname( $target ) . '/temp';
+	$skip   = apply_filters( 'child_theme_updater_skip', [ 'vendor' ] );
 
-	\copy_dir( $source, $target, [ 'vendor' ] );
+	\copy_dir( $source, $target, $skip );
 
 	$wp_filesystem->delete( $source, true, 'd' );
 
