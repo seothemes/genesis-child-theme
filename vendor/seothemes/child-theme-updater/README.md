@@ -38,9 +38,7 @@ add_filter( 'child_theme_updater_skip', 'my_custom_directory' );
  * @return array
  */
 function my_custom_directory( $defaults ) {
-	return array_merge_recursive( [
-		'core',
-	], $defaults );
+	return array_merge( [ 'core' ], $defaults );
 }
 ```
 
