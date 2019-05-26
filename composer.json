@@ -1,0 +1,21 @@
+{
+  "name": "seothemes/genesis-child-theme",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "seothemes",
+      "email": "seothemeswp@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "yahnis-elsts/plugin-update-checker": "^4.6",
+    "seothemes/child-theme-updater": "*"
+  },
+  "config": {
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true
+  }
+}
