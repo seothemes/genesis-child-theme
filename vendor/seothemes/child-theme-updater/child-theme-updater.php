@@ -2,7 +2,7 @@
 
 namespace SeoThemes\ChildThemeUpdater;
 
-add_action( 'after_setup_theme', __NAMESPACE__ . '\load_plugin_update_checker' );
+//add_action( 'after_setup_theme', __NAMESPACE__ . '\load_plugin_update_checker' );
 /**
  * Load plugin update checker.
  *
