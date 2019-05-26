@@ -50,15 +50,23 @@ function get_github_data( $key = 'repo' ) {
 	return $data[ $key ];
 }
 
-//add_action( 'init', 'before_update' );
+add_action( 'upgrader_source_selection', __NAMESPACE__ . '\before_update', 10, 4 );
 /**
  * Runs before theme update.
  *
  * @since 1.0.0
  *
- * @return void
+ * @param             $source
+ * @param             $remote_source
+ * @param             $theme_object
+ * @param array|mixed $hook_extra
+ *
+ * @return mixed
  */
-function before_update() {
+function before_update( $source, $remote_source, $theme_object, $hook_extra ) {
+	if ( is_wp_error( $source ) || ! is_a( $theme_object, 'Theme_Upgrader' ) ) {
+		return $source;
+	}
 
 	// Setup WP_Filesystem.
 	include_once ABSPATH . 'wp-admin /includes/file.php';
@@ -71,38 +79,25 @@ function before_update() {
 
 	\wp_mkdir_p( $target );
 	\copy_dir( $src, $target, [ 'vendor' ] );
+
+	return $source;
 }
 
-/**
- * ------------------------------------------------------------------
- * After update.
- * ------------------------------------------------------------------
- */
-
-//add_action( 'upgrader_process_complete', 'after_update' );
+add_action( 'upgrader_post_install', __NAMESPACE__ . '\after_update', 10, 3 );
 /**
  * Runs after theme update.
  *
  * @since 1.0.0
  *
- * @param object $upgrader   \WP_Upgrader instance.
- * @param array  $hook_extra Array of bulk item update data.
+ * @param bool  $response
+ * @param array $hook_extra
+ * @param array $result
  *
- * @see   https://codex.wordpress.org/Plugin_API/Action_Reference/upgrader_process_complete
- *
- * @return void
+ * @return mixed
  */
-function after_update( $upgrader, $hook_extra ) {
-
-	/*
-	 * Check if it was a theme update.
-	 *
-	 * No need to check for a specific theme name since this code only runs
-	 * if the current child theme is active. If placed in plugin, use the
-	 * 'themes' array to check for a specific theme name during update.
-	 */
-	if ( ! $hook_extra['action'] !== 'update' || $hook_extra['type'] !== 'theme' ) {
-		return;
+function after_update( $response, $hook_extra, $result ) {
+	if ( ! $response || ! array_key_exists( 'destination', $result ) ) {
+		return $response;
 	}
 
 	// Setup WP_Filesystem.
@@ -144,4 +139,6 @@ function after_update( $upgrader, $hook_extra ) {
 	$source = dirname( $target ) . '/temp';
 
 	\copy_dir( $source, $target, [ 'vendor' ] );
+
+	return $response;
 }
