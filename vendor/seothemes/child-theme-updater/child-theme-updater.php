@@ -2,7 +2,7 @@
 
 namespace SeoThemes\ChildThemeUpdater;
 
-//add_action( 'after_setup_theme', __NAMESPACE__ . '\load_plugin_update_checker' );
+add_action( 'after_setup_theme', __NAMESPACE__ . '\load_plugin_update_checker' );
 /**
  * Load plugin update checker.
  *
@@ -38,7 +38,7 @@ function load_plugin_update_checker() {
  * @return mixed
  */
 function get_github_data( $key = 'repo' ) {
-	$file = \get_stylesheet_directory() . DIRECTORY_SEPARATOR . 'style . css';
+	$file = \get_stylesheet_directory() . DIRECTORY_SEPARATOR . 'style.css';
 	$data = \get_file_data( $file, [
 		'repo' => 'Github URI',
 	] );
@@ -63,7 +63,7 @@ function before_update() {
 
 	// Duplicate theme to /temp/ directory.
 	$src    = \get_stylesheet_directory();
-	$target = dirname( $src ) . ' / temp';
+	$target = dirname( $src ) . '/temp';
 
 	\wp_mkdir_p( $target );
 	\copy_dir( $src, $target, [ 'vendor' ] );
@@ -109,8 +109,8 @@ function after_update( $upgrader, $hook_extra ) {
 	/*
 	 * Step 1. Move new vendor directory to temp.
 	 */
-	$src  = \get_stylesheet_directory() . ' / vendor';
-	$dest = dirname( dirname( $src ) ) . ' / temp / vendor';
+	$src  = \get_stylesheet_directory() . '/vendor';
+	$dest = dirname( dirname( $src ) ) . '/temp/vendor';
 
 	\wp_mkdir_p( $dest );
 	\copy_dir( $src, $dest );
@@ -118,12 +118,12 @@ function after_update( $upgrader, $hook_extra ) {
 	/*
 	 * Step 2. Bump temp style sheet version.
 	 */
-	$new_theme    = \get_stylesheet_directory() . ' / style . css';
+	$new_theme    = \get_stylesheet_directory() . '/style.css';
 	$new_data     = \get_file_data( $new_theme, [
 		'Version' => 'Version',
 	] );
 	$new_version  = $new_data['Version'];
-	$old_theme    = dirname( dirname( $new_theme ) ) . ' / temp / style . css';
+	$old_theme    = dirname( dirname( $new_theme ) ) . '/temp/style.css';
 	$old_data     = \get_file_data( $old_theme, [
 		'Version' => 'Version',
 	] );
@@ -137,7 +137,7 @@ function after_update( $upgrader, $hook_extra ) {
 	 * Step 3. Bring everything back except vendor directory.
 	 */
 	$target = \get_stylesheet_directory();
-	$source = dirname( $target ) . ' / temp';
+	$source = dirname( $target ) . '/temp';
 
 	\copy_dir( $source, $target, [ 'vendor' ] );
 }
