@@ -2,7 +2,7 @@
 
 namespace SeoThemes\ChildThemeUpdater;
 
-add_action( 'after_setup_theme', __NAMESPACE__ . '\load_plugin_update_checker' );
+add_action( 'init', __NAMESPACE__ . '\load_plugin_update_checker' );
 /**
  * Load plugin update checker.
  *
@@ -24,8 +24,12 @@ function load_plugin_update_checker() {
 		$defaults['file'],
 		$defaults['theme']
 	);
-	$plugin_update_checker->setAuthentication( $defaults['token'] );
+
 	$plugin_update_checker->setBranch( $defaults['branch'] );
+
+	if ( '' !== $defaults['token'] ) {
+		$plugin_update_checker->setAuthentication( $defaults['token'] );
+	}
 }
 
 /**
