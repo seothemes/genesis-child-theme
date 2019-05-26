@@ -140,5 +140,7 @@ function after_update( $response, $hook_extra, $result ) {
 
 	\copy_dir( $source, $target, [ 'vendor' ] );
 
+	$wp_filesystem->delete( $source, true, 'd' );
+
 	return $response;
 }
