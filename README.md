@@ -109,4 +109,4 @@ _Minor Issues_
 
 ## Contributing
 
-If you find any issues por have any questions about this project, feel free to [create a new issue](https://github.com/seothemes/genesis-child-theme/issues/new) on this repository.
+If you find any issues or have any questions about this project, feel free to [create a new issue](https://github.com/seothemes/genesis-child-theme/issues/new) on this repository.
