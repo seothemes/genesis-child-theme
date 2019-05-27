@@ -104,9 +104,8 @@ _User Education_
 
 _Minor Issues_
 
-- If backup fails but update succeeds, customizations will be lost. Most likely preventable with some additional checks.
 - Theme authors will need to take an extra step to use the standard template hierarchy.
-- Theme authors need to write pluggable/hookable code. Nothing should be hardcoded. This could be considerred a Pro depending on how you look at it.
+- Theme authors need to write pluggable/hookable code. Nothing should be hardcoded. This could be considered a Pro depending on how you look at it.
 
 ## Contributing
 
