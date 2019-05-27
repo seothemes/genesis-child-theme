@@ -92,6 +92,7 @@ After running an update, open up the modified file and see if the line is still 
 - Better option than having a `customizations` folder (more flexible, templates work correctly etc).
 - Same workflow for users, install parent theme, install child theme. No other steps required.
 - Minimal code (~100 lines). Available in convenient [Child Theme Updater](https://github.com/seothemes/child-theme-updater) Composer package.
+- If automatic update fails for whatever reason, the centralized code makes manual updates easier. User only needs to replace one folder instead of search through all files.
 
 ### Cons
 
