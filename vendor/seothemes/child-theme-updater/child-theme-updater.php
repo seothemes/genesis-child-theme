@@ -37,18 +37,17 @@ function before_update( $source, $remote_source, $theme_object, $hook_extra ) {
 		return $source;
 	}
 
-	// Setup WP_Filesystem.
-	include_once ABSPATH . 'wp-admin /includes/file.php';
-	\WP_Filesystem();
-	global $wp_filesystem;
+	// Create theme backup.
+	$origin = \get_stylesheet_directory();
+	$backup = get_theme_backup_path();
 
-	// Duplicate theme to temp directory, excluding vendor directory.
-	$src    = \get_stylesheet_directory();
-	$target = dirname( $src ) . '/temp';
-	$skip   = apply_filters( 'child_theme_updater_skip', [ 'vendor' ] );
+	\wp_mkdir_p( $backup );
+	\copy_dir( $origin, $backup, [] );
 
-	\wp_mkdir_p( $target );
-	\copy_dir( $src, $target, $skip );
+	// Stop update if backup failed.
+	if ( ! file_exists( $backup . '/functions.php' ) ) {
+		$source = false;
+	}
 
 	return $source;
 }
@@ -78,26 +77,53 @@ function after_update( $response, $hook_extra, $result ) {
 	global $wp_filesystem;
 
 	// Bump temp style sheet version.
-	$new_theme    = \get_stylesheet_directory() . '/style.css';
-	$new_data     = \get_file_data( $new_theme, [ 'Version' => 'Version' ] );
-	$new_version  = $new_data['Version'];
-	$old_theme    = dirname( dirname( $new_theme ) ) . '/temp/style.css';
-	$old_data     = \get_file_data( $old_theme, [ 'Version' => 'Version' ] );
-	$old_version  = $old_data['Version'];
-	$old_contents = $wp_filesystem->get_contents( $old_theme );
-	$new_contents = str_replace( $old_version, $new_version, $old_contents );
+	$theme_headers = [
+		'Name'    => 'Theme Name',
+		'Version' => 'Version',
+	];
+	$new_theme     = \get_stylesheet_directory() . '/style.css';
+	$new_data      = \get_file_data( $new_theme, $theme_headers );
+	$new_version   = $new_data['Version'];
+	$old_theme     = get_theme_backup_path() . '/style.css';
+	$old_data      = \get_file_data( $old_theme, $theme_headers );
+	$old_version   = $old_data['Version'];
+	$old_contents  = $wp_filesystem->get_contents( $old_theme );
+	$new_contents  = str_replace( $old_version, $new_version, $old_contents );
 
 	$wp_filesystem->put_contents( $old_theme, $new_contents, FS_CHMOD_FILE );
 
 	// Bring everything back except vendor directory.
 	$target = \get_stylesheet_directory();
-	$source = dirname( $target ) . '/temp';
+	$source = get_theme_backup_path();
 	$skip   = apply_filters( 'child_theme_updater_skip', [ 'vendor' ] );
 
 	\copy_dir( $source, $target, $skip );
 
-	// Delete temp directory.
-	$wp_filesystem->delete( $source, true, 'd' );
+	// Rename backup theme.
+	$old_name    = $old_data['Name'];
+	$new_name    = $old_name . ' Backup ' . $old_version;
+	$new_content = str_replace( $old_name, $new_name, $old_contents );
+
+	$wp_filesystem->put_contents( $old_theme, $new_content, FS_CHMOD_FILE );
+
+	// Maybe delete theme backup (not recommended).
+	if ( apply_filters( 'child_theme_updater_delete_backup', false ) ) {
+		$wp_filesystem->delete( $source, true, 'd' );
+	}
 
 	return $response;
+}
+
+/**
+ * Returns the path to the theme backup.
+ *
+ * @since 1.0.0
+ *
+ * @return string
+ */
+function get_theme_backup_path() {
+	$theme   = \get_stylesheet_directory();
+	$version = \wp_get_theme()->get( 'Version' );
+
+	return "{$theme}-backup-{$version}";
 }

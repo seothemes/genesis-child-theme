@@ -1,14 +1,17 @@
 /**
  * Theme Name:  Genesis Child Theme
- * Theme URI:   https://seothemes.com/
- * Description: Blank child theme for testing automatic updates.
+ * Theme URI:   https://github.com/seothemes/genesis-child-theme/
+ * Description: Genesis child theme with automatic updates.
  * Author:      SEO Themes
  * Author URI:  https://seothemes.com/
- * Version:     2.0.0
- * Tags:        genesis-child-theme
+ * Version:     1.0.0
+ * Tags:        genesis
  * Text Domain: genesis-child-theme
  * Template:    genesis
  * License:     GPL-3.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Github URI:  https://github.com/seothemes/genesis-child-theme/
+ *
+ * This file can be used for adding custom CSS to the child theme. Code added
+ * to this file will not be lost during automatic updates. It's recommended
+ * to always use this file, never touch the files in the `/core/` folder.
  */
