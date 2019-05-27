@@ -10,17 +10,14 @@
   "require": {
     "php": ">=5.4",
     "yahnis-elsts/plugin-update-checker": "^4.6",
-    "seothemes/child-theme-updater": "@dev"
+    "seothemes/child-theme-updater": "*"
   },
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../dev/seothemes/child-theme-updater",
-      "options": {
-        "symlink": true
-      }
-    }
-  ],
+  "autoload": {
+    "files": [
+      "../genesis/lib/init.php",
+      "core/core-functions.php"
+    ]
+  },
   "config": {
     "preferred-install": {
       "*": "dist"
