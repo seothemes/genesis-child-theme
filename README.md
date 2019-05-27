@@ -4,6 +4,8 @@ Proof of concept for how to handle automatic updates in WordPress child themes -
 
 Watch video - https://youtu.be/bpckfhCKeKo
 
+## How it Works
+
 It requires theme authors to store all of the updatable code in a specific directory. This could be `vendor`, `core`, `lib`, `do-not-edit`, a combination of these or whatever the theme author wants to call it. When an update runs, only these directories are changed, all other files are untouched - except for the stylesheet, which needs to have the version number bumped.
 
 In this example project, the `core` and `vendor` directories are updatable. This means that they contain all of the code that might be updated in future versions. Below is a list of which files can and cannot be edited by the user:
@@ -23,8 +25,7 @@ child-theme-name/          # → ✅ Root directory
 
 This project has additional functions in place to hide the non-editable folders from the WordPress Theme Editor. This will prevent the majority of users from finding and editing these files.
 
-
-## How it works
+__3 Step Process__
 
 _Before Update_
 
